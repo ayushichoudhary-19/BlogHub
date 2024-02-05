@@ -1,12 +1,12 @@
 # ✨ BlogHub
 
-BlogHub stands as a dynamic web application crafted for users to articulate their thoughts and ideas through published articles. It seamlessly incorporates user authentication, a robust rich text editor, and Appwrite as the backend, ensuring a smooth and secure experience for both writers and readers.
+BlogHub is a dynamic web application crafted for users to articulate their thoughts and ideas through published articles. It seamlessly incorporates user authentication, a robust rich text editor, and Appwrite as the backend, ensuring a smooth and secure experience for writers and readers.
 
 ---
 ## 🚀 Features
 
 - **User Authentication:** Guarantees secure signup and login using email credentials.
-- **Article Management:** Streamlines the creation, editing, and deletion of articles.
+- **Article Management:** Streamlines articles' creation, editing, and deletion.
 - **Rich Text Editor:** Empowered by TinyMCE, the editor presents a range of formatting options, including font styles, colors, headings, indentations, images, tables, special characters, and numbering.
 - **Browse Articles:** Users can peruse a dedicated section to read and engage with articles from other contributors.
 
@@ -28,11 +28,12 @@ BlogHub stands as a dynamic web application crafted for users to articulate thei
 - **"react-redux": "^9.1.0"**
 - **"react-router-dom": "^6.21.3"**
 
-## 🚀 Installation
+## 🚦 Running the Project
 
 1. **Clone the Repository:** `git clone https://github.com/ayushichoudhary-19/BlogHub`
 2. **Navigate to the Project Directory:** `cd BlogHub`
 3. **Install Dependencies:** `npm install`
+4. Run `npm run dev` to get the project started.
 
 ## 🌟 Usage
 
