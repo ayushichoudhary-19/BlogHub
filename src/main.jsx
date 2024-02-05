@@ -14,7 +14,6 @@ import AddPost from './pages/AddPost.jsx'
 import Home from './pages/Home.jsx'
 import { AuthLayout } from './Components/index.js'
 
-
 const router = createBrowserRouter([
   {
     path: "/",

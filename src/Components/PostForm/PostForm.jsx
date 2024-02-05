@@ -124,7 +124,7 @@ function PostForm({ post }) {
                 {loading? 
                     <div className='w-full grid place-items-center'> <Loader></Loader></div>
                     :
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className= {` ${post? "  hover:shadow-green-500 " : " hover:shadow-customPink "} text-black shadow-sm hover:cursor-pointer duration-200 hover:drop-shadow-2xl rounded-lg w-full`} >
+                <Button type="submit" bgColor={post ? "bg-green-500" : "bg-customPink"} className= {` ${post? "  hover:shadow-green-500 text-black " : " hover:shadow-customPink text-white "} shadow-sm hover:cursor-pointer duration-200 hover:drop-shadow-2xl rounded-lg w-full`} >
                     {post ? "Update" : "Submit"}
                 </Button>}
             </div>
