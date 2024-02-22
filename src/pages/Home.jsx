@@ -25,7 +25,7 @@ function Home() {
                             Welcome to the <span className='text-customPink'>BlogHub!</span>
                         </h1>
                         <p className='md:text-lg text-sm lg:px-5 px-10 md:px-0 mx-auto'>
-                            Your hub for interesting reads, insights, and more. Start your journey into the world of our blog app. Happy reading!
+                        Find your next great read, share your story with the world. Write, connect, and be heard.
                         </p>
                         <div className="mx-auto">
                             <Button
