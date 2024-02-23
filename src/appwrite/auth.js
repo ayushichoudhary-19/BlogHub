@@ -44,6 +44,10 @@ export class AuthService {
             console.log("Appwrite :: Logout :: Error ::", error);
         }
     }
+    async getUserId() {
+        const user = await this.getCurrentUser();
+        return user ? user.$id: null;
+    }
 }
 
 const authService = new AuthService()

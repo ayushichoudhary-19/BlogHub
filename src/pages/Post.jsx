@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { Button, Container } from "../Components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import MiniLoader from "../Components/MiniLoader";
+
+
 
 export default function Post() {
     const [post, setPost] = useState(null);
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(post?.likes || 0);
+    const [loading, setLoading] = useState(false);
     const { slug } = useParams();
     const navigate = useNavigate();
-
     const userData = useSelector((state) => state.auth.userData);
 
     const isAuthor = post && userData ? post.userId === userData.$id : false;
@@ -17,11 +24,50 @@ export default function Post() {
     useEffect(() => {
         if (slug) {
             appwriteService.getPost(slug).then((post) => {
-                if (post) setPost(post);
-                else navigate("/");
+                if (post) {
+                    setPost(post);
+                    setLikesCount(post.likes || 0);
+                    checkUserLikedPost(userData.$id, post.$id);
+                } else {
+                    navigate("/");
+                }
             });
-        } else navigate("/");
-    }, [slug, navigate]);
+        } else {
+            navigate("/");
+        }
+    }, [slug, navigate, userData]);
+
+    const checkUserLikedPost = async (userId, postId) => {
+        try {
+            const liked = await appwriteService.getLikesByUserAndPost(userId, postId);
+            setLiked(liked);
+        } catch (error) {
+            console.error("Error checking if user liked the post:", error);
+        }
+    }
+
+    const handleLike = async () => {
+        setLoading(true);
+        try{
+        if (liked) {
+            // Unlike post
+            const userIdSuffix = userData.$id.slice(-5);
+            await appwriteService.deleteLike(`${userIdSuffix}_${post.$id}`);
+            setLiked(false);
+            setLikesCount((prevCount) => (prevCount>0?prevCount - 1 :0));
+        } else {
+            // Like post
+            await appwriteService.createLike(post.$id);
+            setLiked(true);
+            setLikesCount((prevCount) => prevCount + 1);
+        }
+    } catch (error) {
+        console.error("Error liking the post:", error);}
+        
+        finally {
+            setLoading(false); 
+        };
+    }
 
     const deletePost = () => {
         appwriteService.deletePost(post.$id).then((status) => {
@@ -59,10 +105,17 @@ export default function Post() {
                 <div className="w-full mb-6">
                     <h1 className="text-2xl font-bold">{post.title}</h1>
                     <p className="text-gray-600">Author: {post.author}</p> 
+
+                    <div className="flex items-center gap-3">
+                    <Button className="flex items-center gap-3 sm:text-xl text-lg" onClick={handleLike}>
+                    {liked ? <FontAwesomeIcon icon={faHeart} className="text-customPink" /> : <FontAwesomeIcon icon={faHeart} className="text-customGray" />} 
+                    {loading ?<MiniLoader/>:<p className="text-gray-600 text-sm">{likesCount}</p>}  
+                    </Button> 
+                    </div>
                 </div>
                 <div className="browser-css text-justify leading-relaxed">
                     {parse(String(post.content))}
-                    </div>
+                </div>
             </Container>
             </div>
         </div>
