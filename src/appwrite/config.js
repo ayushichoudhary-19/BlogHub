@@ -93,11 +93,9 @@ export class Service {
   }
   async createLike(postId) {
     const userId = await authService.getUserId();
-    console.log("userId", userId);
     //taking last 5 characters of the userId and adding it to the postId to create a unique likeId
     const lastFiveChars = userId.slice(-5);
     const likeId = `${lastFiveChars}_${postId}`;
-    console.log("likeId", likeId);
     try {
         // Check if the like already exists
         const likeExists = await this.getLikesByUserAndPost(userId, postId);
@@ -129,7 +127,6 @@ export class Service {
           );
         }
     } catch (error) {
-        console.log(likeId);
         console.log("Appwrite Service :: Create Like :: Error ::", error);
         throw error;
     }
@@ -138,7 +135,6 @@ export class Service {
 
 async deleteLike(likeId) {
     try {
-        console.log("likeId", likeId);
         await this.databases.deleteDocument(
             conf.appwriteDatabaseId,
             conf.appwriteLikesCollectionId,
