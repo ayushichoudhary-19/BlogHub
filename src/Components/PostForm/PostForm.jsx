@@ -83,13 +83,13 @@ function PostForm({ post }) {
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-full lg:w-2/3 px-2">
                 <Input
-                    label="Title :"
+                    label={<>Title <span className='text-red-500'>*</span>:</>}
                     placeholder="Title"
                     className="mb-4"
                     {...register("title", { required: true })}
                 />
                 <Input
-                    label="Slug :"
+                    label={<>Slug <span className='text-red-500'>*</span>:</>}
                     placeholder="Slug"
                     className="mb-4"
                     {...register("slug", { required: true })}
@@ -107,7 +107,7 @@ function PostForm({ post }) {
             </div>
             <div className="w-full lg:w-1/3 px-2">
                 <Input
-                    label="Featured Image :"
+                    label={<>Featured Image <span className='text-red-500'>*</span>:</>}
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
