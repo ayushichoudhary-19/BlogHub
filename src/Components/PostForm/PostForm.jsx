@@ -13,6 +13,7 @@ function PostForm({ post }) {
             slug: post?.$id || "",
             content: post?.content || "",
             status: post?.status || "active",
+            author: post?.author || "anonymous", 
         }
     })
 
@@ -97,6 +98,12 @@ function PostForm({ post }) {
                     }}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                <Input 
+                    label="Author :"
+                    placeholder="Author"
+                    className="mb-4"
+                    {...register("author")}
+                />
             </div>
             <div className="w-full lg:w-1/3 px-2">
                 <Input

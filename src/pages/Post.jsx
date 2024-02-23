@@ -58,6 +58,7 @@ export default function Post() {
                 </div>
                 <div className="w-full mb-6">
                     <h1 className="text-2xl font-bold">{post.title}</h1>
+                    <p className="text-gray-600">Author: {post.author}</p> 
                 </div>
                 <div className="browser-css text-justify leading-relaxed">
                     {parse(String(post.content))}
