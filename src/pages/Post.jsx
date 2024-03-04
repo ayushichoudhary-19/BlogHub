@@ -113,7 +113,7 @@ export default function Post() {
                     </Button> 
                     </div>
                 </div>
-                <div className="browser-css text-center leading-relaxed">
+                <div className="browser-css text-left leading-relaxed">
                     {parse(String(post.content))}
                 </div>
             </Container>
