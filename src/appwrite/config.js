@@ -132,7 +132,6 @@ export class Service {
     }
 }
 
-
 async deleteLike(likeId) {
     try {
         await this.databases.deleteDocument(
@@ -158,6 +157,30 @@ async deleteLike(likeId) {
         console.log("Appwrite Service :: Delete Like :: Error :: ", error);
         throw error;
     }
+}
+
+async displaylikes(postId){
+console.log(postId);
+  try {
+    const query = [
+      Query.equal("postId", postId)
+  ];
+
+  const result = await this.databases.listDocuments(
+    conf.appwriteDatabaseId,
+    conf.appwriteLikesCollectionId,
+    query
+  );
+  
+  return result.documents.map((user) => user.userId);
+
+  if(result.documents.length > 1){
+    //+ one-two more
+  }
+  }
+  catch(error){
+    console.log('Error showing usernames');
+  }
 }
 
 async getLikesByUserAndPost(userId, postId) {
