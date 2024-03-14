@@ -31,8 +31,9 @@ function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center md:min-h-[80vh]">
-            <div className={`mx-auto w-full md:max-w-sm rounded-xl p-5 md:p-8 bg-customGray shadow-grayBorder`}>
+        <div className="items-center justify-center md:min-h-[80vh] text-sm">
+            <div className={`mx-auto w-full md:max-w-sm rounded-xl p-5 md:p-8 border-slate-800 border `}>
+
                 <div className="mb-4 flex justify-center">
                     <span className="inline-block w-full max-w-[80px]">
                         <Logo width="100%" />
@@ -50,7 +51,7 @@ function Signup() {
                 </p>
                 {error && <p className="text-red-600 mt-6 text-center">{error}</p>}
 
-                <form onSubmit={handleSubmit(create)}>
+                <form onSubmit={handleSubmit(create)} className='mt-5'>
                     <div className='space-y-4'>
                         <Input
                             label="Full Name: "

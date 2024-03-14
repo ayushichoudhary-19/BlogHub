@@ -6,6 +6,7 @@ import { Logo, Button, Input } from "./index";
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Loader } from './index';
+import { MovingButton } from './ui/moving-border';
 
 function Login() {
     const navigate = useNavigate();
@@ -33,9 +34,17 @@ function Login() {
         }
     };
 
+    const handleRecruiterDemoLogin = async () => {
+        const testCredentials = {
+            email: 'talentseeker.logincheck@gmail.com',
+            password: '12345678'
+        };
+        await login(testCredentials);
+    };
+
     return (
-        <div className='flex items-center justify-center md:min-h-[80vh]'>
-            <div className={`mx-auto w-full md:max-w-sm rounded-xl p-5 md:p-8 bg-customGray shadow-grayBorder`}>
+        <div className=' items-center justify-center md:min-h-[80vh] text-sm'>
+            <div className={`mx-auto w-full md:max-w-sm rounded-xl p-5 md:p-8 border-slate-800 border `}>
                 <div className="mb-4 flex justify-center">
                     <span className="inline-block w-full max-w-[80px]">
                         <Logo width="100%" />
@@ -90,6 +99,11 @@ function Login() {
                     </div>
                 </form>
             </div>
+            <MovingButton
+                onClick={handleRecruiterDemoLogin}
+                className="rounded-lg border-slate-800">
+                    Login with Demo Account
+                </MovingButton>
         </div>
     );
 }
