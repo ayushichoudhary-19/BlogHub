@@ -11,7 +11,7 @@ function Home() {
         if (status) {
             navigate('/all-posts');
         } else {
-            navigate('/signup');
+            navigate('/login');
         }
     };
 
