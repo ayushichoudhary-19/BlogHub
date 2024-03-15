@@ -1,0 +1,15 @@
+/* .navbar {
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+  max-height: 0;
+  display: flex;
+}
+
+.navbar.open {
+  max-height: 500px;
+} */
+.github-link:hover .github-path {
+    fill: grey;
+    transition-duration: 0.3s;
+  }
+   
