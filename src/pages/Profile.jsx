@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import authService from "../appwrite/auth.js";
-import Loader from "../components/Loader";
+import Loader from "../Components/Loader.jsx";
 import { useSelector } from "react-redux";
 import appwriteService from "../appwrite/config";
-import PostCard from "../components/PostCard";
+import PostCard from "../Components/PostCard.jsx";
 import { BsCalendar3 } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { MdOutlineMailOutline } from "react-icons/md";
