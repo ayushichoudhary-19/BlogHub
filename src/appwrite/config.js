@@ -91,6 +91,24 @@ export class Service {
         throw error;
     }
   }
+
+  async getLikedPosts(userId){
+    try {
+        const query = [
+            Query.equal("userId", userId)
+        ]
+        const res = await this.databases.listDocuments(
+            conf.appwriteDatabaseId,
+            conf.appwriteLikedPostsCollectionId,
+            query
+        )
+        return res;
+    } catch (error) {
+        console.log("Appwrite Service :: Get Liked Posts :: Error :: ", error);
+        throw error;
+    }
+  }
+
   async createLike(postId) {
     const userId = await authService.getUserId();
     //taking last 5 characters of the userId and adding it to the postId to create a unique likeId
@@ -131,6 +149,38 @@ export class Service {
         throw error;
     }
 }
+
+ async addPostToUsersLiked(postId, userId) {
+    try {
+        const res =await this.databases.createDocument(
+            conf.appwriteDatabaseId,
+            conf.appwriteLikedPostsCollectionId,
+            `${userId}_${postId}`,
+            {
+                userId,
+                postId
+            }
+        );
+        console.log(res);
+    } catch (error) {
+        console.log("Appwrite Service :: Add Post To Users Liked :: Error :: ", error);
+        throw error;
+    }
+}
+
+async removePostFromUsersLiked(postId, userId) {
+    try {
+         await this.databases.deleteDocument(
+            conf.appwriteDatabaseId,
+            conf.appwriteLikedPostsCollectionId,
+            `${userId}_${postId}`
+        );
+    } catch (error) {
+        console.log("Appwrite Service :: Remove Post From Users Liked :: Error :: ", error);
+        throw error;
+    }
+}
+
 
 async deleteLike(likeId) {
     try {
@@ -237,6 +287,7 @@ async getLikesByUserAndPost(userId, postId) {
   getFilePreview(fileId){
     return this.bucket.getFilePreview(conf.appwriteBucketId, fileId)
   }
+  
 
   
 }

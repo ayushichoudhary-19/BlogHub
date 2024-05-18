@@ -11,7 +11,6 @@ export class AuthService {
         this.account = new Account(this.client)
         this.users = new Databases(this.client)
     }
-
     async createAccount({email, password, name}){
         try {
             const userAccount = await this.account.create(ID.unique(), email, password, name)
@@ -50,13 +49,21 @@ export class AuthService {
         const user = await this.getCurrentUser();
         return user ? user.$id: null;
     }
-    async getUserName(userId) {
-        // console.log(userId);
-        // const user = await this.users.get('6'); 
-        console.log(user);
-        // console.log(user.name);
-        // return user ? user.name: null;
+    async getUserDetails() {
+        console.log('hi');
+        const user = await this.getCurrentUser();
+        console.log(user.name);
+        return user;
     }
+    // async getUserName(userId) {
+    //     // to get list of all users in appwrite auth of the app
+    //     try {
+    //         const user = await this.account.list
+    //         return user;
+    //     } catch (error) {
+    //         console.error("Error fetching user name", error);
+    //     }
+    // }
 }
 
 const authService = new AuthService()

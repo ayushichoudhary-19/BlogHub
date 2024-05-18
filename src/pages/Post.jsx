@@ -47,11 +47,13 @@ export default function Post() {
 
   const displaylikes = async () => {
     try {
-      const userWhoLiked = await appwriteService.displaylikes(postId);
-      for (const user of userWhoLiked) {
-        const name = await authService.getUserName(user); // Ensure user.userId is passed
-        // console.log(name);
+      const usersWhoLiked = await appwriteService.displaylikes(postId);
+      usersWhoLiked.forEach(async (user) => {
+        console.log(user);
+        const name = await authService.getUserName(user); 
+        console.log(name);
       }
+      );
     } catch (error) {
       console.error("Error::", error);
     }
@@ -65,11 +67,13 @@ export default function Post() {
         // Unlike post
         const userIdSuffix = userData.$id.slice(-5);
         await appwriteService.deleteLike(`${userIdSuffix}_${post.$id}`);
+        await appwriteService.removePostFromUsersLiked(post.$id, userData.$id);
         setLiked(false);
         setLikesCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
       } else {
         // Like post
         await appwriteService.createLike(post.$id);
+        await appwriteService.addPostToUsersLiked(post.$id, userData.$id);
         setLiked(true);
         setLikesCount((prevCount) => prevCount + 1);
       }
