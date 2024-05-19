@@ -73,7 +73,7 @@ const Profile = () => {
 
   return (
     <div className="m-10">
-      <div className="flex flex-col md:grid md:grid-cols-3 p-10 gap-8">
+      <div className="flex flex-col md:grid md:grid-cols-3 lg:p-10 gap-8">
         <div className="col-span-1 bg-gray-900 w-full rounded-xl p-10 py-20">
           <div className="w-full flex justify-center">
             <div 
@@ -86,9 +86,6 @@ const Profile = () => {
           <div className="text-white mt-5">
             <h1 className="text-2xl text-center flex gap-2 font-bold items-center justify-center">{user?.name}</h1>
             <div className="flex gap-5 mt-8 flex-col">
-              <h1 className="lg:text-lg text-md flex gap-2 items-center">
-              <MdOutlineMailOutline />
-               {user?.email}</h1>
               <h1 className="text-md lg:text-lg flex gap-2 items-center">
               <BsCalendar3 /> { `Member Since  `}
                 {new Date(user?.$createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
