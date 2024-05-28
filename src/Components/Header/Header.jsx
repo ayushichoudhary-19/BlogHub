@@ -19,6 +19,8 @@ function Header() {
     setNavOpen(!navOpen);
   };
 
+  const userId = useSelector((state) => state.auth.userData?.$id);
+  
   const navItems = [
     {
       name: "Home",
@@ -42,13 +44,13 @@ function Header() {
     },
     {
       name: "Profile",
-      slug: "/profile",
+      slug: `/profile/${userId}`,
       active: authStatus,
     },
   ];
 
   return (
-    <header className="py-5 md:py-5 my-5 sticky top-0 z-50 px-0 md:px-10 bg-clip-padding">
+    <header className={`md:py-5 py-5 sticky top-0 z-50 px-0 md:px-10 bg-clip-padding ${navOpen? 'md:bg-transparent bg-black': ""}`}>
       <Container>
         <nav className="flex justify-between flex-wrap items-center">
           <div className="">
@@ -100,7 +102,7 @@ function Header() {
                 <NavLink
                   onClick={closeNavbar}
                   to={"/signup"}
-                  className="md:ml-4 py-2 px-5 text-white button-custom rounded-xl shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-customPink hover:bg-white hover:text-black"
+                  className="md:ml-4 py-2 px-5 text-white button-custom rounded-xl shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-customPurple hover:bg-white hover:text-black"
                 >
                   {" "}
                   Signup{" "}

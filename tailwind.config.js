@@ -14,7 +14,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        customPink: '#ff00bd',
+        customPurple: '#605BFF',
         customGray: '#171F29',
       },
       boxShadow: {
