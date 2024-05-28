@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function PostForm({ post }) {
+    const navigate = useNavigate()
+    const userData = useSelector(state => state.auth.userData)
+    const [loading, setLoading] = useState(false)
 
     const { register, handleSubmit, watch, setValue, getValues, control } = useForm({
         defaultValues: {
@@ -13,13 +16,10 @@ function PostForm({ post }) {
             slug: post?.$id || "",
             content: post?.content || "",
             status: post?.status || "active",
-            author: post?.author || "Anonymous", 
+            author: userData.name, 
         }
     })
 
-    const navigate = useNavigate()
-    const userData = useSelector(state => state.auth.userData)
-    const [loading, setLoading] = useState(false)
 
     const submit = async (data) => {
         setLoading(true)
@@ -85,31 +85,38 @@ function PostForm({ post }) {
                 <Input
                     label={<>Title <span className='text-red-500'>*</span>:</>}
                     placeholder="Title"
-                    className="mb-4"
+                    className="mb-4 border border-gray-600 text-white rounded-lg bg-black focus:bg-black focus:outline focus:ring-none"
+                    style={{'backgroundColor': 'black', 'color': 'white'}}
                     {...register("title", { required: true })}
                 />
                 <Input
                     label={<>Slug <span className='text-red-500'>*</span>:</>}
                     placeholder="Slug"
-                    className="mb-4"
+                    className="mb-4 border border-gray-600 text-white rounded-lg bg-black focus:bg-black focus:outline focus:ring-none"
+                    style={{'backgroundColor': 'black', 'color': 'white'}}
                     {...register("slug", { required: true })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                <div className='mt-4'>
                 <Input 
                     label="Author :"
                     placeholder="Author"
-                    className="mb-4"
+                    style={{'backgroundColor': 'black', 'color': 'white'}}
+                    className="mb-4 border border-gray-600 text-white rounded-lg bg-black focus:bg-black focus:outline focus:ring-none cursor-not-allowed"
                     {...register("author")}
+                    disabled
                 />
+                </div>
             </div>
             <div className="w-full lg:w-1/3 px-2">
                 <Input
                     label={<>Featured Image <span className='text-red-500'>*</span>:</>}
                     type="file"
-                    className="mb-4"
+                    style={{'backgroundColor': 'black', 'color': 'white'}}
+                    className="mb-4 border border-gray-600 text-white rounded-lg bg-black focus:bg-black focus:outline focus:ring-none"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
@@ -125,13 +132,14 @@ function PostForm({ post }) {
                 <Select
                     options={["active", "inactive"]}
                     label="Status"
-                    className="mb-4"
+                    style={{'backgroundColor': 'black', 'color': 'white'}}
+                    className="mb-4 border border-gray-600 text-white rounded-lg bg-black focus:bg-black focus:outline focus:ring-none"
                     {...register("status", { required: true })}
                 />
                 {loading? 
                     <div className='w-full grid place-items-center'> <Loader></Loader></div>
                     :
-                <Button type="submit" bgColor={post ? "bg-green-500" : "bg-customPink"} className= {` ${post? "  hover:shadow-green-500 text-black " : " hover:shadow-customPink text-white "} shadow-sm hover:cursor-pointer duration-200 hover:drop-shadow-2xl rounded-lg w-full`} >
+                <Button type="submit" bgColor={post ? "bg-green-500" : "bg-customPurple"} className= {` ${post? "  hover:shadow-green-500 text-black " : " hover:shadow-customPurple text-white "} shadow-sm hover:cursor-pointer duration-200 hover:drop-shadow-2xl rounded-lg w-full`} >
                     {post ? "Update" : "Submit"}
                 </Button>}
             </div>
