@@ -8,6 +8,11 @@ import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import MiniLoader from "../Components/MiniLoader";
 import  authService from '../appwrite/auth.js';
+import { GoBack } from "../Components/ui/goBack.jsx";
+import UserProfilePhoto from "../Components/ui/userProfilePhoto.jsx";
+import calculateReadingTime from "../utils/readingTime.js";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -19,6 +24,7 @@ export default function Post() {
   const userData = useSelector((state) => state.auth.userData);
   const isAuthor = post && userData ? post.userId === userData.$id : false;
   const postId = slug;
+  const readingTime = calculateReadingTime(post?.content);
 
   useEffect(() => {
     if (slug) {
@@ -94,50 +100,60 @@ export default function Post() {
   };
 
   return post ? (
-    <div className="py-8 flex justify-center">
+    <div className="py-8 flex flex-col justify-center items-center">
       <div className="max-w-[57rem]">
         <Container>
-          <div className="w-full flex justify-center mb-4 relative border rounded-xl max-h-80">
-            <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
-              className="rounded-xl object-cover"
-            />
-
-            {isAuthor && (
-              <div className="absolute right-2 top-2">
+          <div className="flex justify-between">
+          <GoBack />
+          {isAuthor && (
+              <div className="flex items-center">
                 <Link to={`/edit-post/${post.$id}`}>
-                  <Button className="mr-3 rounded-lg bg-[#ffffff] py-1 hover:bg-[#ffffff80]">
-                    ✏️
+                  <Button className="rounded-lg py-1 hover:text-gray-400 flex items-center gap-1">
+                  <CiEdit /> Edit
                   </Button>
                 </Link>
-                <Button
-                  className="rounded-lg bg-[#ffffff] py-1 hover:bg-[#ffffff80]"
+                   <Button className="rounded-lg py-1 hover:text-gray-400 flex items-center gap-1"
                   onClick={deletePost}
                 >
-                  🗑️
+                <MdDeleteOutline /> Delete
                 </Button>
               </div>
             )}
+            </div>
+          <div className="w-full flex justify-center mb-4 relative max-h-80">
+            <img
+              src={appwriteService.getFilePreview(post.featuredImage)}
+              alt={post.title}
+              className="rounded- object-cover"
+            />
           </div>
           <div className="w-full mb-6">
             <h1 className="text-2xl font-bold">{post.title}</h1>
-            <p className="text-gray-600">Author: {post.author}</p>
-
+            <div className="flex justify-between">
+            <div className="text-gray-400 flex items-center justify-cemter gap-2 my-2">
+              <UserProfilePhoto userId={post.userId} userName={post.author} />
+              <div className="flex flex-col">
+              <p>by  {post.author} </p>
+              <p className="text-xs text-gray-600"> {new Date(post.$createdAt).toLocaleDateString('en-US', { day:'2-digit' ,month: 'short', year: 'numeric' })}</p>
+              </div>
+            </div>
+            <div className="text-sm text-gray-400 flex items-center px-5 py-2 rounded-md my-5 "> {readingTime} min Read
+            </div>
+            </div>
             <div className="flex items-center gap-3">
               <Button
-                className="flex items-center gap-3 sm:text-xl text-lg"
+                className="flex items-center gap-3 sm:text-xl text-md px-3 py-1 lg:py-1 my-3 rounded-md bg-gray-800"
                 onClick={handleLike}
               >
                 {liked ? (
-                  <FontAwesomeIcon icon={faHeart} className="text-customPink" />
+                  <FontAwesomeIcon icon={faHeart} className="text-customPurple" />
                 ) : (
                   <FontAwesomeIcon icon={faHeart} className="text-customGray" />
                 )}
                 {loading ? (
                   <MiniLoader />
                 ) : (
-                  <p className="text-gray-600 text-sm">{likesCount}</p>
+                  <p className="text-gray-300 text-sm">{likesCount}</p>
                 )}
               </Button>
               {/* <a className="text-gray-600 underline" onClick={displaylikes}>
