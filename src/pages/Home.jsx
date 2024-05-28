@@ -33,7 +33,7 @@ function Home() {
 
                     <div className='flex flex-col items-center md:items-start'>
                         <h1 className='text-[52px] md:text-[52px] lg:text-[72px] hero-heading mx-auto'>
-                            Welcome to the <span className='text-customPink'>BlogHub!</span>
+                            Welcome to the <span className='text-customPurple'>BlogHub!</span>
                         </h1>
                         <p className='md:text-lg text-sm lg:px-5 px-10 md:px-0 mx-auto'>
                             <TextGenerateEffect words={welcomeMessage} />
@@ -41,7 +41,7 @@ function Home() {
                         <div className="mx-auto">
                             <Button
                                 onClick={() => navigateHome()}
-                                className="my-7 md:py-2 py-0 px-5 text-white font-weight-400 bg-customPink rounded-xl shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
+                                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 bg-customPurple rounded-xl shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
                             >
                                 {status ? "See Posts" : "Get Started"}
                             </Button>

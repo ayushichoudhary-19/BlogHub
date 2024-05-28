@@ -2,12 +2,7 @@ import React from 'react'
 
 function Loader() {
     return (
-        <div class="flex flex-row gap-2">
-            <div class="w-4 h-4 rounded-full bg-customPink animate-bounce"></div>
-            <div class="w-4 h-4 rounded-full bg-customPink animate-bounce [animation-delay:-.1s]"></div>
-            <div class="w-4 h-4 rounded-full bg-customPink animate-bounce [animation-delay:-.2s]"></div>
-        </div>
+        <div className="w-10 h-10 border-4 border-t-customPurple border-l-customPurple rounded-full animate-spin"></div>
     )
 }
-
 export default Loader

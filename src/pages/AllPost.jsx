@@ -40,7 +40,7 @@ function AllPosts() {
         ) : posts.length > 0 ? (
           <div className='flex flex-wrap flex-row'>
             {posts.map((post) => (
-              <div key={post.$id} className='p-2 w-full sm:w-1/3 xl:w-1/4'>
+              <div key={post.$id} className='p-2 w-full sm:w-full lg:w-1/2'>
                 <PostCard {...post} />
               </div>
             ))}
@@ -51,12 +51,12 @@ function AllPosts() {
             {authStatus ? (
               <Button
                 onClick={handleAddPostClick}
-                className="mt-4 bg-customPink text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
+                className="mt-4 bg-customPurple text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
               >
                 Add Post
               </Button>
             ) : (
-              <Button to="/signup" className="mt-4 bg-customPink text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer">
+              <Button to="/signup" className="mt-4 bg-customPurple text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer">
                 Signup
               </Button>
             )}
