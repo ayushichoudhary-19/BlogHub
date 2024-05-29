@@ -11,7 +11,6 @@ function DummyPostCard({
 }) {
     const $id = "my-first-blog";
     const title = "What I learnt from this project";
-    const featuredImage = "https://images.unsplash.com/photo-1634170380004-4b3b3b3b3b3b";
     const author = "Ayushi Choudhary";
     const $createdAt = "2024-02-04T20:47:28.904+00:00";
     const likes = 100;
