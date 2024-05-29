@@ -87,7 +87,7 @@ function Home() {
    
   </div>
   <div>
-    <img src={`/UserProfileDemo.png`} className=" w-full lg:w-[52rem]" />
+    <img src={`/UserProfileDemo.png`} className=" w-full lg:w-[70rem]" />
     <div className="h-50 w-full font-bold flex justify-center pt-3 lg:pt-5 text-customPurple  md:text-2xl">
     & FIND THEM IN YOUR PROFILE
     </div>
