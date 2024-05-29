@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 import { Container, Button } from "../Components";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const welcomeMessage = `Find your next great read, share your story with the wor
 
 function Home() {
   const status = useSelector((state) => state.auth.status);
+  const userId = useSelector((state) => state.auth.userData?.$id);
 
   const navigate = useNavigate();
   const navigateHome = () => {
@@ -21,6 +22,22 @@ function Home() {
       navigate("/login");
     }
   };
+  const navigateAddPost = () => {
+    if (status) {
+      navigate("/add-post");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const navigateProfile = () => {
+    if (status) {
+        navigate(`/profile/${userId}`);
+        }
+        else {
+            navigate("/login");
+        }
+    };
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -54,6 +71,7 @@ function Home() {
             </div>
           </div>
         </div>
+
         <div className="flex flex-col-reverse lg:flex-row my-5 lg:mt-[12rem] gap-5">
           <DummyPostCard />
           <div className="lg:min-h-[12rem] flex flex-col items-end w-full">
@@ -66,35 +84,61 @@ function Home() {
             </div>
           </div>
         </div>
+
+        <div className="flex flex-col lg:flex-row my-5 lg:mt-[12rem] gap-5">
+          <div className="lg:min-h-[12rem] flex flex-col items-start w-full">
+            <div className="h-50 w-full font-bold flex justify-center pb-3 lg:py-5 text-customPurple  md:text-2xl">
+              LIKE YOUR FAVOURITES
+            </div>
+            <video
+              ref={videoRef}
+              src="/LikePostVideoDemo.mov"
+              autoPlay
+              muted
+              loop
+              width="100%"
+              height="auto"
+            />
+          </div>
+          <div>
+            <img
+              src={`/UserProfileDemo.png`}
+              className=" w-full lg:w-[52rem]"
+            />
+            <div className="h-50 w-full font-bold flex justify-center pt-3 lg:pt-5 text-customPurple  md:text-2xl">
+              & FIND THEM IN YOUR PROFILE
+            </div>
+            <div className="mx-auto">
+              <Button
+                onClick={() => navigateProfile()}
+                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 bg-customPurple rounded-2xl shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
+              >
+                {status ? "Visit Profile " : "Get Started"}
+              </Button>
+        </div>
+          </div>
+        </div>
+
         <div className="flex flex-col lg:flex-row my-5 lg:mt-[12rem] gap-5">
           <div className="lg:min-h-[12rem] flex flex-col items-start w-full">
             <div className="h-50 w-full border-b flex justify-start text-customPurple border-customPurple text-md md:text-2xl">
               Write your ideas and thoughts
             </div>
             <div className="text-gray-300 text-sm text-start">
-              Through a Richt Text Editor craft engaging content
+              Through a Rich Text Editor craft engaging content
             </div>
           </div>
           <img src={`/EditorDemo.png`} className=" w-full lg:w-[52rem]" />
         </div>
 
-        <div className="flex flex-col lg:flex-row my-5 lg:mt-[12rem] gap-5">
-  <div className="lg:min-h-[12rem] flex flex-col items-start w-full">
-  <div className="h-50 w-full font-bold flex justify-center pb-3 lg:py-5 text-customPurple  md:text-2xl">
-    LIKE YOUR FAVOURITES
-    </div>
-    <video ref={videoRef} src="/LikePostVideoDemo.mov" autoPlay muted loop width="100%" height="auto" />
-   
-  </div>
-  <div>
-    <img src={`/UserProfileDemo.png`} className=" w-full lg:w-[52rem]" />
-    <div className="h-50 w-full font-bold flex justify-center pt-3 lg:pt-5 text-customPurple  md:text-2xl">
-    & FIND THEM IN YOUR PROFILE
-    </div>
-  </div>
-  
-</div>
-
+        <div className="mx-auto">
+              <Button
+                onClick={() => navigateAddPost()}
+                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 bg-customPurple rounded-2xl shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
+              >
+                {status ? "Add Post + " : "Get Started"}
+              </Button>
+        </div>
       </Container>
     </div>
   );
