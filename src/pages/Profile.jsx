@@ -3,22 +3,23 @@ import { useParams } from "react-router-dom";
 import authService from "../appwrite/auth.js";
 import Loader from "../Components/Loader.jsx";
 import appwriteService from "../appwrite/config";
-import { BsCalendar3 } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { TfiWrite } from "react-icons/tfi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip } from "@material-tailwind/react";
+
 import MiniPostCard from "../Components/MiniPostCard.jsx";
 import { BiError } from "react-icons/bi";
+import LocationSelector from "../Components/Profile/Location.jsx";
+import AboutMe from "../Components/Profile/AboutMe.jsx";
 
 const Profile = () => {
-  const { userId } = useParams(); 
+  const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [postsAuthored, setPostsAuthored] = useState([]);
   const [postsLiked, setPostsLiked] = useState([]);
   const [userExists, setUserExists] = useState(true);
+  const [edit, setEdit] = useState(false);
+  const [location, setLocation] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,6 +43,19 @@ const Profile = () => {
       }
     };
     fetchUser();
+
+    const getUserProfileAbouts = async () => {
+      try {
+        const userAbouts = await appwriteService.getUserAbouts(userId);
+        if (userAbouts) {
+          setLocation(userAbouts.location);
+          setAboutMe(userAbouts.About);
+        }
+      } catch (error) {
+        console.error("Failed to fetch or create user abouts", error);
+      }
+    };
+    getUserProfileAbouts();
   }, [userId]);
 
   useEffect(() => {
@@ -74,6 +88,16 @@ const Profile = () => {
     fetchUserRelatedData();
   }, [user]);
 
+  const updateProfile = async () => {
+    if (!edit) return;
+    try {
+      const userId = user.$id;
+      await appwriteService.updateUserAbouts(userId, location, aboutMe);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="h-[80vh] w-full flex justify-center items-center">
@@ -93,68 +117,139 @@ const Profile = () => {
 
   return (
     <div className="m-10">
-      <div className="flex flex-col md:grid md:grid-cols-3 lg:p-10 gap-8">
-        <div className="col-span-1 bg-gray-900 w-full rounded-xl p-10 py-20">
-          <div className="w-full flex justify-center">
+      <div className="flex flex-col md:grid md:grid-cols-3 lg:py-10 gap-8">
+        <div className="col-span-1 border border-gray-700 w-full rounded-xl p-10 py-20">
+          <div className="w-full flex justify-start gap-2 md:gap-5 pb-5 md:pb-10 border-b border-gray-900">
             <img
               src={`https://ui-avatars.com/api/?name=${user?.name}&background=random`}
               alt={user?.name}
-              className="w-32 h-32 rounded-full"
+              className="lg:w-[5rem] lg:h-[5rem] w-15 h-15 rounded-2xl"
             />
+            <div className="flex flex-col justify-center items-start">
+              <h1 className="text-sm md:text-xl text-start">{user?.name}</h1>
+              <p
+                className="text-[12px] md:text-xs text-start text-gray-400"
+                style={{ overflowWrap: "anywhere" }}
+              >
+                {user.$id}
+              </p>
+            </div>
           </div>
-          <div className="text-white mt-5">
-            <h1 className="text-2xl text-center flex gap-2 font-bold items-center justify-center">
-              {user?.name}
-            </h1>
-            <div className="flex gap-5 mt-8 flex-col">
-              <h1 className="text-md lg:text-lg flex gap-2 items-center">
-                <BsCalendar3 /> {`Member Since  `}
+          <div className="flex flex-col gap-2 justify-center items-start py-2 md:py-8 text-[12px] md:text-sm text-gray-400">
+            {location && aboutMe && (
+              <>
+                <LocationSelector
+                  edit={edit}
+                  location={location}
+                  setLocation={setLocation}
+                />
+                <AboutMe
+                  edit={edit}
+                  aboutMe={aboutMe}
+                  setAboutMe={setAboutMe}
+                />
+              </>
+            )}
+            <button
+              className="border border-gray-700 hover:border-gray-500 duration-50 transition-all w-full py-2 my-2 lg:my-5 px-4 rounded-xl text-gray-400 hover:text-gray-300"
+              onClick={() => {
+                setEdit(!edit);
+                updateProfile();
+              }}
+            >
+              {edit ? "Save" : "Edit Profile"}
+            </button>
+          </div>
+
+          <div className="my-2 lg:my-5">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: "20px 0",
+              }}
+            >
+              <hr
+                style={{
+                  flex: 1,
+                  border: "none",
+                  borderTop: "1px solid rgb(17 24 39)",
+                }}
+              />
+              <span
+                style={{
+                  padding: "0 10px",
+                  whiteSpace: "nowrap",
+                  color: "#9CA3AF",
+                  fontSize: "14px",
+                }}
+              >
+                OVERVIEW
+              </span>
+              <hr
+                style={{
+                  flex: 1,
+                  border: "none",
+                  borderTop: "1px solid rgb(17 24 39)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex gap-5 justify-evenly items-center">
+            <div className="border px-3 py-2 flex flex-col items-center justify-center border-gray-700 rounded-[15px] lg:w-[5rem] lg:h-[5rem] w-15 h-15  ">
+              <h1 className="text-gray-400 text-md lg:text-2xl font-bold">
+                {postsAuthored.length}
+              </h1>
+              <p className="text-gray-600 text:xs">Posts</p>
+            </div>
+            <div className="border px-3 py-2 gap-0 flex flex-col items-center justify-center border-gray-700 rounded-[15px] lg:w-[5rem] lg:h-[5rem] w-15 h-15  ">
+              <h1 className="text-gray-400 text-md lg:text-2xl font-bold">
+                {postsLiked.length}
+              </h1>
+              <p className="text-gray-600 text:xs">Liked</p>
+            </div>
+          </div>
+          <div className="text-gray-600 mt-5">
+            <div className="flex gap-0 mt-8 flex-col justify-center items-center">
+              <h1 className="text-xs">
+                {`Member Since  `}
                 {new Date(user?.$createdAt).toLocaleDateString("en-US", {
                   month: "short",
                   year: "numeric",
                 })}
               </h1>
-              <h1 className="text-md lg:text-lg flex gap-2 items-center">
-                <BsCalendar3 /> {`Last Updated in  `}
+              <h1 className="text-xs">
+                {`Last Updated in  `}
                 {new Date(user?.$updatedAt).toLocaleDateString("en-US", {
                   month: "short",
                   year: "numeric",
                 })}
               </h1>
-              <h1 className="text-md  lg:text-lg flex gap-2 items-center">
-                {" "}
-                <TfiWrite /> Total Posts Created: {postsAuthored.length}
-              </h1>
-              <h1 className="text-md  lg:text-lg flex gap-2 items-center">
-                <FontAwesomeIcon icon={faHeart} />
-                Total Liked Posts: {postsLiked.length}
-              </h1>
-              <Tooltip
-                content="Coming Soon"
-                className="p-5 text-white rounded-xl bg-gray-950 "
-              >
-                <button
-                  className="bg-customPurple w-full py-2 px-4 rounded-xl cursor-not-allowed text-white"
-                  disabled
-                >
-                  <Link to="/edit-profile" className="pointer-events-none">
-                    Edit Profile
-                  </Link>
-                </button>
-              </Tooltip>
+            </div>
+            <div className="flex items-center justify-center mt-5 w-full">
+              <div style={{ width: "10%" }}>
+                <hr
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    borderTop: "1px solid rgb(17 24 39)",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
+
         <div className="col-span-2 grid gap-8">
-          <div className="bg-gray-900 p-8 rounded-xl">
-            <h2 className="text-xl mb-4 px-8">Your Posts</h2>
+          <div className="border border-gray-700 w-full rounded-xl p-8">
+            <h2 className="text-md text-[#9CA3AF] mb-4">Your Posts</h2>
             <div className="md:grid md:grid-cols-4 ">
               {postsAuthored.length > 0 ? (
                 <div className="col-span-3 md:flex md:gap-8">
                   {postsAuthored.map((post) => (
                     <div
                       key={post.$id}
-                      className=" w-full sm:w-1/3 xl:w-1/4 md:bg-gray-800 rounded-xl md:min-w-[12rem]"
+                      className=" w-full sm:w-1/3 xl:w-1/4 rounded-xl md:min-w-[12rem]"
                     >
                       <MiniPostCard {...post} />
                     </div>
@@ -164,22 +259,22 @@ const Profile = () => {
                 <p className="col-span-3">No posts authored by you so far</p>
               )}
               <div className="flex justify-center items-center md:col-span-1">
-                <button className=" bg-customPurple w-full hover:bg-white hover:text-black text-white  py-2 px-4 rounded-xl">
-                  <Link to="/add-post"> + Add More</Link>
+                <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all w-full py-2 my-2 lg:my-5 px-4 rounded-xl text-gray-400 hover:text-gray-300">
+                  <Link to="/add-post">Add More + </Link>
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-900 p-8 rounded-xl">
-            <h2 className="text-xl mb-4 px-8">Liked Posts</h2>
+          <div className="border border-gray-700 w-full rounded-xl p-8">
+            <h2 className="text-md text-[#9CA3AF] mb-4">Liked Posts</h2>
             <div className="md:grid md:grid-cols-4">
               {postsLiked.length > 0 ? (
                 <div className="col-span-3 md:flex md:gap-8">
                   {postsLiked.map((post) => (
                     <div
                       key={post.$id}
-                      className=" w-full sm:w-1/3 xl:w-1/4 md:bg-gray-800 rounded-xl md:min-w-[12rem]"
+                      className=" w-full sm:w-1/3 xl:w-1/4 rounded-xl md:min-w-[12rem]"
                     >
                       <MiniPostCard {...post} />
                     </div>
@@ -189,8 +284,8 @@ const Profile = () => {
                 <p className="col-span-3">No posts liked by you so far</p>
               )}
               <div className="flex justify-center items-center md:col-span-1">
-                <button className=" bg-customPurple w-full hover:bg-white hover:text-black text-white  py-2 px-4 rounded-xl">
-                  <Link to="/all-posts"> + Read More</Link>
+                <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all w-full py-2 my-2 lg:my-5 px-4 rounded-xl text-gray-400 hover:text-gray-300">
+                  <Link to="/all-posts">Read More +</Link>
                 </button>
               </div>
             </div>
