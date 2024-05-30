@@ -29,7 +29,7 @@ function Home() {
       navigate("/login");
     }
   };
-
+  
   const navigateProfile = () => {
     if (status) {
         navigate(`/profile/${userId}`);
@@ -70,7 +70,7 @@ function Home() {
               </Button>
               {status && (
               <Button
-                onClick={() => navigateHome()}
+                onClick={() => navigateProfile()}
                 className=" md:py-[0.7rem] btn-shadow py-0 px-5 text-white font-weight-400 border border-gray-600 rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
               >
                 Visit Profile
@@ -78,7 +78,7 @@ function Home() {
               )}
                {status && (
               <Button
-                onClick={() => navigateHome()}
+                onClick={() => navigateAddPost()}
                 className=" md:py-[0.7rem] btn-shadow py-0 px-5 text-white font-weight-400 border border-gray-600 rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
               >
                 Add Post
@@ -126,7 +126,7 @@ function Home() {
             <div className="mx-auto">
               <Button
                 onClick={() => navigateProfile()}
-                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 bg-customPurple rounded-lg shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
+                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 gradient-btn rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
               >
                 {status ? "Visit Profile " : "Get Started"}
               </Button>
@@ -149,7 +149,7 @@ function Home() {
         <div className="mx-auto">
               <Button
                 onClick={() => navigateAddPost()}
-                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 bg-customPurple rounded-lg shadow-lg duration-200 hover:cursor-pointer hover:bg-white hover:text-black hover:scale-105 md:mx-2 md:my-6"
+                className="my-7 md:py-[0.7rem] py-0 px-5 text-white font-weight-400 gradient-btn rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
               >
                 {status ? "Add Post + " : "Get Started"}
               </Button>
