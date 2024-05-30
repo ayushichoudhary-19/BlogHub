@@ -118,7 +118,9 @@ function Home() {
           </div>
           <div>
           <img src={`/UserProfileDemo.png`} className=" w-full lg:w-[70rem]" />
+
             <div className="h-50 w-full font-bold flex justify-center pt-3 lg:pt-5 gradient-text md:text-xl">
+
               & FIND THEM IN YOUR PROFILE
             </div>
             <div className="mx-auto">
