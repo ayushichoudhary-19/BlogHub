@@ -125,7 +125,7 @@ function Header() {
                 <NavLink
                   onClick={closeNavbar}
                   to={"/signup"}
-                  className="md:ml-4 py-2 px-5 text-white button-custom rounded-xl shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-customPurple hover:bg-white hover:text-black"
+                  className="md:ml-4 py-2 px-5 text-white button-custom rounded-lg shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-customPurple hover:bg-white hover:text-black"
                 >
                   {" "}
                   Signup{" "}

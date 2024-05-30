@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +7,7 @@
 * {
     box-sizing: border-box;
     font-family: "Nunito", sans-serif;
+    overflow-x: hidden;
 }
 
 body {
@@ -14,15 +16,49 @@ body {
 }
 
 .hero-heading {
-    color: #FFF;
+    /* color: #FFF;
     font-family: Poppins;
     font-style: normal;
     font-weight: 600;
     line-height: 140%;
-    letter-spacing: 0.72px;
+    letter-spacing: 0.72px; */
+    font-family: "Plus Jakarta Sans", "Nunito" ,sans-serif !important;
+    text-align: center;
+    letter-spacing: -.04em;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(#fff 30%, rgba(255, 255, 255, .38));
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.3;
+    transition: transform .96s cubic-bezier(.3,1.17,.55,.99);
+    position: static;
 }
 
-
+.hero-heading-span {
+    /* color: #FFF;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;
+    letter-spacing: 0.72px; */
+    font-family: "Plus Jakarta Sans", "Nunito" ,sans-serif !important;
+    text-align: center;
+    letter-spacing: -.04em;
+    background-image: linear-gradient(#605BFF 30%, #615bff77 );
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.3;
+    transition: transform .96s cubic-bezier(.3,1.17,.55,.99);
+    position: static;
+}
 
 .card-hover:hover,
 .gradient-card {
@@ -43,4 +79,40 @@ body {
 .white__gradient {
     background: rgba(255, 255, 255, 0.6);
     filter: blur(750px);
+}
+
+.gradient-text{
+    font-family: "Plus Jakarta Sans", "Nunito" ,sans-serif !important;
+    text-align: center;
+    background-image: linear-gradient(#605BFF 30%, #615bff77 );
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-top: 0;
+    margin-bottom: 0;
+    transition: transform .96s cubic-bezier(.3,1.17,.55,.99);
+    position: static;
+}
+.gradient-btn{
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-image: linear-gradient(to right ,#605BFF, #615bff77);
+    /* Optional: Add a box shadow for a better effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 1s ease;
+}
+.gradient-btn:hover{
+    background-image: linear-gradient(to right,  #615bff77, #605BFF);
+ 
+}
+
+.btn-shadow{
+    box-shadow: 0 0 2px #615bff8c;
+}
+
+.btn-shadow:hover{
+    box-shadow: 0 0 40px #7772f384;
 }

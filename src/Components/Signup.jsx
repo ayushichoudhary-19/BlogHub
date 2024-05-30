@@ -87,7 +87,8 @@ function Signup() {
                             <div className='w-full grid place-items-center'> <Loader></Loader></div>
                             :
                             <Button type="submit"
-                                className="my-3 py-2 px-4 w-full text-white bg-customPurple button-custom rounded-lg shadow-lg hover:bg-[#EFFF3A] hover:text-black duration-400 hover:cursor-pointer"
+                            style={{marginTop: "1.5rem"}}
+                                className="my-3 py-2 px-4 w-full md:py-3 text-white bg-customPurple button-custom rounded-lg shadow-lg hover:bg-[#7974f8f5] duration-400 hover:cursor-pointer"
                             >
                                 Create Account
                             </Button>}

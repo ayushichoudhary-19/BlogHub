@@ -51,12 +51,12 @@ function AllPosts() {
             {authStatus ? (
               <Button
                 onClick={handleAddPostClick}
-                className="mt-4 bg-customPurple text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
+                className="mt-4 bg-customPurple text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
               >
                 Add Post
               </Button>
             ) : (
-              <Button to="/signup" className="mt-4 bg-customPurple text-white rounded-xl px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer">
+              <Button to="/signup" className="mt-4 bg-customPurple text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer">
                 Signup
               </Button>
             )}
