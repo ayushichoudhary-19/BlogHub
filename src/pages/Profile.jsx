@@ -20,6 +20,8 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
   const [location, setLocation] = useState("");
   const [aboutMe, setAboutMe] = useState("");
+  const [showAllAuthored, setShowAllAuthored] = useState(false);
+  const [showAllLiked, setShowAllLiked] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -115,9 +117,18 @@ const Profile = () => {
     );
   }
 
+  // Limit the number of posts shown initially
+  const displayedAuthoredPosts = showAllAuthored
+    ? postsAuthored
+    : postsAuthored.slice(0, 3);
+  const displayedLikedPosts = showAllLiked
+    ? postsLiked
+    : postsLiked.slice(0, 3);
+
   return (
     <div className="m-10">
       <div className="flex flex-col md:grid md:grid-cols-3 lg:py-10 gap-8">
+        {/* Left sidebar - keep as is */}
         <div className="col-span-1 border border-gray-700 w-full rounded-xl p-10 py-20">
           <div className="w-full flex justify-start gap-2 md:gap-5 pb-5 md:pb-10 border-b border-gray-900">
             <img
@@ -241,53 +252,73 @@ const Profile = () => {
         </div>
 
         <div className="col-span-2 grid gap-8">
+          {/* Your Posts Section */}
           <div className="border border-gray-700 w-full rounded-xl p-8">
-            <h2 className="text-md text-[#9CA3AF] mb-4">Your Posts</h2>
-            <div className="md:grid md:grid-cols-4 ">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-md text-[#9CA3AF]">Your Posts</h2>
+              {postsAuthored.length > 3 && (
+                <button
+                  onClick={() => setShowAllAuthored(!showAllAuthored)}
+                  className="text-sm text-gray-400 hover:text-gray-300"
+                >
+                  {showAllAuthored ? "Show Less" : "View All"}
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {postsAuthored.length > 0 ? (
-                <div className="col-span-3 md:flex md:gap-8">
-                  {postsAuthored.map((post) => (
-                    <div
-                      key={post.$id}
-                      className=" w-full sm:w-1/3 xl:w-1/4 rounded-xl md:min-w-[12rem]"
-                    >
+                <>
+                  {displayedAuthoredPosts.map((post) => (
+                    <div key={post.$id} className="w-full">
                       <MiniPostCard {...post} />
                     </div>
                   ))}
-                </div>
+                </>
               ) : (
-                <p className="col-span-3">No posts authored by you so far</p>
+                <p className="col-span-full">No posts authored by you so far</p>
               )}
-              <div className="flex justify-center items-center md:col-span-1">
-                <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all w-full py-2 my-2 lg:my-5 px-4 rounded-xl text-gray-400 hover:text-gray-300">
-                  <Link to="/add-post">Add More + </Link>
-                </button>
-              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all py-2 px-4 rounded-xl text-gray-400 hover:text-gray-300 w-full sm:w-auto">
+                <Link to="/add-post">Add More +</Link>
+              </button>
             </div>
           </div>
 
+          {/* Liked Posts Section */}
           <div className="border border-gray-700 w-full rounded-xl p-8">
-            <h2 className="text-md text-[#9CA3AF] mb-4">Liked Posts</h2>
-            <div className="md:grid md:grid-cols-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-md text-[#9CA3AF]">Liked Posts</h2>
+              {postsLiked.length > 3 && (
+                <button
+                  onClick={() => setShowAllLiked(!showAllLiked)}
+                  className="text-sm text-gray-400 hover:text-gray-300"
+                >
+                  {showAllLiked ? "Show Less" : "View All"}
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {postsLiked.length > 0 ? (
-                <div className="col-span-3 md:flex md:gap-8">
-                  {postsLiked.map((post) => (
-                    <div
-                      key={post.$id}
-                      className=" w-full sm:w-1/3 xl:w-1/4 rounded-xl md:min-w-[12rem]"
-                    >
+                <>
+                  {displayedLikedPosts.map((post) => (
+                    <div key={post.$id} className="w-full">
                       <MiniPostCard {...post} />
                     </div>
                   ))}
-                </div>
+                </>
               ) : (
-                <p className="col-span-3">No posts liked by you so far</p>
+                <p className="col-span-full">No posts liked by you so far</p>
               )}
-              <div className="flex justify-center items-center md:col-span-1">
-                <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all w-full py-2 my-2 lg:my-5 px-4 rounded-xl text-gray-400 hover:text-gray-300">
-                  <Link to="/all-posts">Read More +</Link>
-                </button>
-              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <button className="border border-gray-700 hover:border-gray-500 duration-50 transition-all py-2 px-4 rounded-xl text-gray-400 hover:text-gray-300 w-full sm:w-auto">
+                <Link to="/all-posts">Read More +</Link>
+              </button>
             </div>
           </div>
         </div>

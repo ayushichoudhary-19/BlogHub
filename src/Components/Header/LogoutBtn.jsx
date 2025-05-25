@@ -21,14 +21,13 @@ function LogoutBtn() {
   };
 
   return (
-    <>
-      <button
-        className="py-2 px-5 bg-customPurple text-white rounded-lg shadow-lg duration-400 hover:drop-shadow-2xl hover:bg-white hover:text-black hover:cursor-pointer"
-        onClick={logoutHandler}
-      >
-        Logout
-      </button>
-    </>
+    <button
+      className="py-2 px-5 bg-customPurple text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-white hover:text-black"
+      onClick={logoutHandler}
+      disabled={loading}
+    >
+      {loading ? <Loader className="w-5 h-5" /> : 'Logout'}
+    </button>
   );
 }
 

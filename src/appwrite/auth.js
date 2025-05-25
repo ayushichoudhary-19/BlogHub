@@ -1,6 +1,7 @@
 import conf from "../conf/conf";
 import { Client, Account, ID, Databases } from "appwrite";
 import appwriteService from "../appwrite/config";
+import { getCache, setCache } from "../utils/cache";
 
 export class AuthService {
   client = new Client();
@@ -69,12 +70,18 @@ export class AuthService {
   }
 
   async getCurrentUser() {
+    const cacheKey = `auth-current-user`;
+    const cached = getCache(cacheKey, 5 * 60 * 1000);
+    if (cached) return cached;
+  
     try {
-      return await this.account.get();
+      const user = await this.account.get();
+      setCache(cacheKey, user);
+      return user;
     } catch (error) {
       console.log("Appwrite :: Get Current User :: Error::", error);
+      return null;
     }
-    return null;
   }
 
   async logout() {

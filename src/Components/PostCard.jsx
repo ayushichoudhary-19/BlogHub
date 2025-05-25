@@ -10,7 +10,7 @@ import { BiLike } from "react-icons/bi";
 function PostCard({
   $id,
   title,
-  featuredImage,
+  // featuredImage,
   author,
   $createdAt,
   likes,
@@ -29,7 +29,7 @@ function PostCard({
 
   return (
     <Link to={`/post/${$id}`}>
-      <div className="flex flex-col border border-gray-900 rounded-lg p-4 lg:h-[260px] hover:bg-gray-900">
+      <div className="flex flex-col justify-between border border-gray-900 rounded-lg p-4 lg:h-[260px] hover:bg-gray-900">
         <div className="grid md:grid-cols-3 ">
           <div className="flex flex-col md:col-span-2 items-center justify-start gap-2 lg:mr-3">
             <div className="flex items-center justify-start w-full gap-2 my-2">
@@ -51,13 +51,13 @@ function PostCard({
               {parse(truncateHTML(content, 200))}
             </p>
           </div>
-          <div className=" flex items-center justify-center w-full my-2">
+          {/* <div className=" flex items-center justify-center w-full my-2">
             <img
               src={appwriteService.getFilePreview(featuredImage)}
               alt={title}
               className="rounded-xl w-full sm:w-[12rem] max-h-[12rem] max-w-full lg:min-h-[12rem] object-cover"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center justify-start w-full gap-10">
           <div className="flex items-center text-sm gap-5">

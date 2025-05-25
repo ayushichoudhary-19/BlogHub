@@ -20,10 +20,9 @@ function App() {
         }
       } catch (error) {
         console.error('Authentication check failed:', error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
+      }finally
+      {
+        setLoading(false);
       }
     };
 

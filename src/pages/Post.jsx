@@ -17,14 +17,13 @@ import { MdDeleteOutline } from "react-icons/md";
 export default function Post() {
   const [post, setPost] = useState(null);
   const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(post?.likes || 0);
+  const [likesCount, setLikesCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const { slug } = useParams();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
   const isAuthor = post && userData ? post.userId === userData.$id : false;
-  const postId = slug;
-  const readingTime = calculateReadingTime(post?.content);
+  const readingTime = post ? calculateReadingTime(post.content) : 0;
 
   useEffect(() => {
     if (slug) {
@@ -32,7 +31,9 @@ export default function Post() {
         if (post) {
           setPost(post);
           setLikesCount(post.likes || 0);
-          checkUserLikedPost(userData.$id, post.$id);
+          if (userData) {
+            checkUserLikedPost(userData.$id, post.$id);
+          }
         } else {
           navigate("/");
         }
@@ -51,40 +52,28 @@ export default function Post() {
     }
   };
 
-  const displaylikes = async () => {
-    try {
-      const usersWhoLiked = await appwriteService.displaylikes(postId);
-      usersWhoLiked.forEach(async (user) => {
-        console.log(user);
-        const name = await authService.getUserName(user); 
-        console.log(name);
-      }
-      );
-    } catch (error) {
-      console.error("Error::", error);
-    }
-  };
-  
-
   const handleLike = async () => {
+    if (!userData) {
+      navigate("/login");
+      return;
+    }
+    
     setLoading(true);
+    const wasLiked = liked;
+    setLiked(!wasLiked);
+    setLikesCount(prev => wasLiked ? Math.max(prev - 1, 0) : prev + 1);
+    
     try {
-      if (liked) {
-        // Unlike post
+      if (wasLiked) {
         const userIdSuffix = userData.$id.slice(-5);
         await appwriteService.deleteLike(`${userIdSuffix}_${post.$id}`);
-        await appwriteService.removePostFromUsersLiked(post.$id, userData.$id);
-        setLiked(false);
-        setLikesCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
       } else {
-        // Like post
         await appwriteService.createLike(post.$id);
-        await appwriteService.addPostToUsersLiked(post.$id, userData.$id);
-        setLiked(true);
-        setLikesCount((prevCount) => prevCount + 1);
       }
     } catch (error) {
       console.error("Error liking the post:", error);
+      setLiked(wasLiked);
+      setLikesCount(prev => wasLiked ? prev + 1 : Math.max(prev - 1, 0));
     } finally {
       setLoading(false);
     }
@@ -93,80 +82,85 @@ export default function Post() {
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
       if (status) {
-        appwriteService.deleteFile(post.featuredImage);
         navigate("/");
       }
     });
   };
 
-  return post ? (
-    <div className="py-8 flex flex-col justify-center items-center">
-      <div className="max-w-[57rem]">
-        <Container>
-          <div className="flex justify-between">
-          <GoBack />
-          {isAuthor && (
-              <div className="flex items-center">
+  if (!post) {
+    return (
+      <div className="py-8 flex justify-center items-center min-h-[60vh]">
+        <MiniLoader />
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8 flex flex-col justify-start items-center min-h-screen">
+      <Container>
+        <article className="rounded-xl shadow-sm p-6 max-w-4xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <GoBack />
+            {isAuthor && (
+              <div className="flex items-center gap-2">
                 <Link to={`/edit-post/${post.$id}`}>
-                  <Button className="rounded-lg py-1 hover:text-gray-400 flex items-center gap-1">
-                  <CiEdit /> Edit
+                  <Button className="rounded-lg py-1 px-3 hover:bg-white/10 text-white/50 flex items-center gap-1 transition duration-200">
+                    <CiEdit /> Edit
                   </Button>
                 </Link>
-                   <Button className="rounded-lg py-1 hover:text-gray-400 flex items-center gap-1"
+                <Button 
+                  className="rounded-lg py-1 px-3 hover:bg-white/10 text-red-600 flex items-center gap-1 transition duration-200"
                   onClick={deletePost}
                 >
-                <MdDeleteOutline /> Delete
+                  <MdDeleteOutline /> Delete
                 </Button>
               </div>
             )}
-            </div>
-          <div className="w-full flex justify-center mb-4 relative max-h-80">
-            <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
-              className="rounded- object-cover"
-            />
           </div>
-          <div className="w-full mb-6">
-            <h1 className="text-2xl font-bold">{post.title}</h1>
-            <div className="flex justify-between">
-            <div className="text-gray-400 flex items-center justify-cemter gap-2 my-2">
-              <UserProfilePhoto userId={post.userId} userName={post.author} />
-              <div className="flex flex-col">
-              <p>by  {post.author} </p>
-              <p className="text-xs text-gray-600"> {new Date(post.$createdAt).toLocaleDateString('en-US', { day:'2-digit' ,month: 'short', year: 'numeric' })}</p>
+          <h1 className="text-3xl font-bold mb-4 text-gray-50">{post.title}</h1>
+
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-4 border-b border-white/60">
+            <div className="flex items-center gap-3 mb-3 sm:mb-0">
+              <UserProfilePhoto userName={post.author} />
+              <div>
+                <p className="font-medium text-gray-200">by {post.author}</p>
+                <p className="text-sm text-gray-500">
+                  {new Date(post.$createdAt).toLocaleDateString('en-US', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                  })}
+                </p>
               </div>
             </div>
-            <div className="text-sm text-gray-400 flex items-center px-5 py-2 rounded-md my-5 "> {readingTime} min Read
-            </div>
-            </div>
-            <div className="flex items-center gap-3">
+            
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-white/50 border flex items-center gap-1 px-3 py-1 rounded-full border-white/50">
+                {readingTime} min read
+              </div>
+              
               <Button
-                className="flex items-center gap-3 sm:text-xl text-md px-3 py-1 lg:py-1 my-3 rounded-md bg-gray-800"
+                className={`flex items-center bg-none gap-2 px-4 py-1 rounded-full transition duration-200 ${liked ? 'text-[#605BFF]' : 'text-gray-600 hover:bg-white/10'}`}
                 onClick={handleLike}
+                disabled={loading}
               >
-                {liked ? (
-                  <FontAwesomeIcon icon={faHeart} className="text-customPurple" />
-                ) : (
-                  <FontAwesomeIcon icon={faHeart} className="text-customGray" />
-                )}
+                <FontAwesomeIcon 
+                  icon={faHeart} 
+                  className={liked ? "text-customPurple" : "text-gray-400"} 
+                />
                 {loading ? (
                   <MiniLoader />
                 ) : (
-                  <p className="text-gray-300 text-sm">{likesCount}</p>
+                  <span>{likesCount}</span>
                 )}
               </Button>
-              {/* <a className="text-gray-600 underline" onClick={displaylikes}>
-                ${postId} and {likesCount-1} others
-              </a> */}
-              <div></div>
             </div>
           </div>
-          <div className="browser-css text-left leading-relaxed">
+          <div className="prose prose-lg max-w-none text-white/100 leading-relaxed">
             {parse(String(post.content))}
           </div>
-        </Container>
-      </div>
+        </article>
+      </Container>
     </div>
-  ) : null;
+  );
 }

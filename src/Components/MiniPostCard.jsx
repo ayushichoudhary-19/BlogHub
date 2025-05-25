@@ -7,7 +7,7 @@ import calculateReadingTime from "../utils/readingTime";
 function MiniPostCard({
   $id,
   title,
-  featuredImage,
+  // featuredImage,
   author,
   $createdAt,
   likes,
@@ -18,11 +18,11 @@ function MiniPostCard({
     <Link to={`/post/${$id}`}>
       <div className="w-full flex flex-col items-center border border-gray-800 text-left hover:bg-gray-900 rounded-xl p-4 h-full">
         <div className="w-full flex justify-center mb-4 h-[80%]">
-          <img
+          {/* <img
             src={appwriteService.getFilePreview(featuredImage)}
             alt={title}
             className="rounded-xl h-full object-cover"
-          />
+          /> */}
         </div>
         <h2 className="text-sm text-gray-300 font-bold w-full">
           {title.slice(0, 15)}...

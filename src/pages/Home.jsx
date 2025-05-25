@@ -64,7 +64,7 @@ function Home() {
             <div className="mx-auto my-7 lg:mt-10 flex gap-4 flex-col lg:flex-row">
               <Button
                 onClick={() => navigateHome()}
-                className="md:py-[0.7rem] py-0 px-5 gradient-btn text-white font-weight-400 border border-gray-600 rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
+                className="md:py-[0.7rem] py-0 px-5 gradient-btn text-white font-weight-400 rounded-lg shadow-lg duration-200 hover:cursor-pointer md:mx-2 md:my-6"
               >
                 {status ? "See Posts" : "Get Started"}
               </Button>

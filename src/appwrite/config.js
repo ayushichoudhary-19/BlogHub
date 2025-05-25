@@ -1,6 +1,7 @@
 import conf from "../conf/conf";
 import { Client, Databases, ID, Query, Storage } from "appwrite";
 import authService from "./auth.js";
+import { getCache, setCache } from "../utils/cache";
 
 export class Service {
   client = new Client();
@@ -19,7 +20,7 @@ export class Service {
     title,
     slug,
     content,
-    featuredImage,
+    // featuredImage,
     status,
     userId,
     author,
@@ -33,7 +34,7 @@ export class Service {
         {
           title,
           content,
-          featuredImage,
+          // featuredImage,
           status,
           userId,
           author,
@@ -48,9 +49,17 @@ export class Service {
 
   async updatePost(
     slug,
-    { title, content, featuredImage, status, author, likes }
+    {
+      title,
+      content,
+      // featuredImage,
+      status,
+      author,
+      likes,
+    }
   ) {
     try {
+      sessionStorage.removeItem(`user-about-${userId}`);
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteBlogsCollectionId,
@@ -58,7 +67,7 @@ export class Service {
         {
           title,
           content,
-          featuredImage,
+          // featuredImage,
           status,
           author,
         }
@@ -83,12 +92,18 @@ export class Service {
   }
 
   async getPost(slug) {
+    const cacheKey = `post-${slug}`;
+    const cached = getCache(cacheKey, 5 * 60 * 1000);
+    if (cached) return cached;
+
     try {
-      return await this.databases.getDocument(
+      const post = await this.databases.getDocument(
         conf.appwriteDatabaseId,
         conf.appwriteBlogsCollectionId,
         slug
       );
+      setCache(cacheKey, post);
+      return post;
     } catch (error) {
       console.log("Appwrite Service :: Get Post :: Error :: ", error);
       throw error;
@@ -96,12 +111,18 @@ export class Service {
   }
 
   async getPosts(queries = [Query.equal("status", "active")]) {
+    const cacheKey = `posts-active`;
+    const cached = getCache(cacheKey, 3 * 60 * 1000);
+    if (cached) return cached;
+
     try {
-      return await this.databases.listDocuments(
+      const result = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteBlogsCollectionId,
         queries
       );
+      setCache(cacheKey, result);
+      return result;
     } catch (error) {
       console.log("Appwrite Service :: Get Posts :: Error :: ", error);
       throw error;
@@ -125,38 +146,34 @@ export class Service {
 
   async createLike(postId) {
     const userId = await authService.getUserId();
-    //taking last 5 characters of the userId and adding it to the postId to create a unique likeId
     const lastFiveChars = userId.slice(-5);
     const likeId = `${lastFiveChars}_${postId}`;
     try {
-      // Check if the like already exists
       const likeExists = await this.getLikesByUserAndPost(userId, postId);
       if (likeExists) {
         return;
-      } else {
-        // Like doesn't exist, proceed to create it
-        await this.databases.createDocument(
-          conf.appwriteDatabaseId,
-          conf.appwriteLikesCollectionId,
-          likeId,
-          {
-            likeId,
-            userId,
-            postId,
-          }
-        );
-
-        // Increment likes count in the blog post document
-        const post = await this.getPost(postId);
-        const currentLikes = post.likes || 0;
-        const newLikesCount = currentLikes + 1;
-        await this.databases.updateDocument(
-          conf.appwriteDatabaseId,
-          conf.appwriteBlogsCollectionId,
-          postId,
-          { likes: newLikesCount }
-        );
       }
+      await this.databases.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteLikesCollectionId,
+        likeId,
+        {
+          likeId,
+          userId,
+          postId,
+        }
+      );
+
+      await this.databases.updateDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBlogsCollectionId,
+        postId,
+        { likes: this.databases.increment(1) }
+      );
+
+      await this.addPostToUsersLiked(postId, userId);
+
+      return true;
     } catch (error) {
       console.log("Appwrite Service :: Create Like :: Error ::", error);
       throw error;
@@ -165,7 +182,7 @@ export class Service {
 
   async addPostToUsersLiked(postId, userId) {
     try {
-      const res = await this.databases.createDocument(
+      await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteLikedPostsCollectionId,
         `${userId}_${postId}`,
@@ -174,12 +191,39 @@ export class Service {
           postId,
         }
       );
-      console.log(res);
     } catch (error) {
       console.log(
         "Appwrite Service :: Add Post To Users Liked :: Error :: ",
         error
       );
+    }
+  }
+
+  async deleteLike(likeId) {
+    try {
+      const postId = likeId.split("_")[1];
+      const userId = await authService.getUserId();
+
+      await Promise.all([
+        this.databases.deleteDocument(
+          conf.appwriteDatabaseId,
+          conf.appwriteLikesCollectionId,
+          likeId
+        ),
+
+        this.databases.updateDocument(
+          conf.appwriteDatabaseId,
+          conf.appwriteBlogsCollectionId,
+          postId,
+          { likes: this.databases.decrement(1) }
+        ),
+
+        this.removePostFromUsersLiked(postId, userId),
+      ]);
+
+      return true;
+    } catch (error) {
+      console.log("Appwrite Service :: Delete Like :: Error :: ", error);
       throw error;
     }
   }
@@ -211,10 +255,8 @@ export class Service {
       const post = await this.getPost(postId);
       const currentLikes = post.likes || 0;
 
-      // Decrement likes count by 1
       const newLikesCount = Math.max(currentLikes - 1, 0);
 
-      // Update likes count in the blog post document
       await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteBlogsCollectionId,
@@ -239,10 +281,6 @@ export class Service {
       );
 
       return result.documents.map((user) => user.userId);
-
-      if (result.documents.length > 1) {
-        //+ one-two more
-      }
     } catch (error) {
       console.log("Error showing usernames");
     }
@@ -260,11 +298,10 @@ export class Service {
         query
       );
 
-      // Check if any likes were found
       if (result.documents.length > 0) {
-        return true; // Return true if likes exist for the given user and post
+        return true;
       } else {
-        return false; // Return false if no likes were found
+        return false;
       }
     } catch (error) {
       console.log(
@@ -275,7 +312,6 @@ export class Service {
     }
   }
 
-  // upload file
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
@@ -304,14 +340,21 @@ export class Service {
   }
 
   async getUserAbouts(userId) {
+    const cacheKey = `user-about-${userId}`;
+    const cached = getCache(cacheKey, 10 * 60 * 1000);
+    if (cached) return cached;
+
     try {
-      return await this.databases.getDocument(
+      const data = await this.databases.getDocument(
         conf.appwriteDatabaseId,
         conf.appwriteUserProfileCollectionId,
         userId
       );
+      setCache(cacheKey, data);
+      return data;
     } catch (error) {
       console.log("Appwrite Service :: Get User Profile :: Error :: ", error);
+      throw error;
     }
   }
 
@@ -348,6 +391,7 @@ export class Service {
         document.About = aboutMe;
         document.location = location;
         console.log("Updating", document);
+        sessionStorage.removeItem(`post-${slug}`);
         await this.databases.updateDocument(
           conf.appwriteDatabaseId,
           conf.appwriteUserProfileCollectionId,
