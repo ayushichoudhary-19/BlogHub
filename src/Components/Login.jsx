@@ -68,7 +68,7 @@ function Login() {
                             label="Email: "
                             placeholder="Enter your email"
                             type="email"
-                            className="focus:border-solid focus:border-x-2 focus:border-customPurple"
+                            className="focus:border-solid focus:border-x-2 focus:border-[#605BFF]"
                             {...register("email", {
                                 required: true,
                                 validate: {
@@ -81,7 +81,7 @@ function Login() {
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
-                            className="focus:border-solid focus:border-x-2 focus:border-customPurple"
+                            className="focus:border-solid focus:border-x-2 focus:border-[#605BFF]"
                             {...register("password", {
                                 required: true,
                             })}
@@ -92,7 +92,7 @@ function Login() {
                             <Button
                                 type="submit"
                                 style={{ marginTop: "1.5rem"}}
-                                className="my-3 py-2 px-4 w-full md:py-3 text-white bg-customPurple button-custom rounded-lg shadow-lg hover:bg-[#7974f8f5] duration-400 hover:cursor-pointer"
+                                className="my-3 py-2 px-4 w-full md:py-3 text-white bg-[#605BFF] button-custom rounded-lg shadow-lg hover:bg-[#7974f8f5] duration-400 hover:cursor-pointer"
                             >
                                 Sign in
                             </Button>

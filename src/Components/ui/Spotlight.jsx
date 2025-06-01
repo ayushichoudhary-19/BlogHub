@@ -1,11 +1,12 @@
 import React from "react";
 import { cn } from "@/utils/cn";
 
+
 export const Spotlight = ({ className, fill }) => {
   return (
     <svg
       className={cn(
-        "animate-spotlight pointer-events-none absolute z-[1] h-[150%] w-[138%] lg:h-[100%] lg:w-[200%] opacity-0",
+        "pointer-events-none absolute z-[1] h-[150%] w-[138%] lg:h-[100%] lg:w-[200%] opacity-0 animate-[spotlight_2s_ease_0.75s_1_forwards]",
         className
       )}
       xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +22,7 @@ export const Spotlight = ({ className, fill }) => {
           transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
           fill={fill || "#605bff"}
           fillOpacity="0.21"
-        ></ellipse>
+        />
       </g>
       <defs>
         <filter
@@ -33,17 +34,17 @@ export const Spotlight = ({ className, fill }) => {
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
-          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
             in2="BackgroundImageFix"
             result="shape"
-          ></feBlend>
+          />
           <feGaussianBlur
             stdDeviation="151"
             result="effect1_foregroundBlur_1065_8"
-          ></feGaussianBlur>
+          />
         </filter>
       </defs>
     </svg>

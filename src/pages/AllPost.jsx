@@ -89,15 +89,25 @@ function AllPosts() {
             <p>Nothing to Show</p>
             {authStatus ? (
               <Button
-                onClick={handleAddPostClick}
-                className="mt-4 bg-customPurple text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
-              >
-                Add Post
-              </Button>
+              onClick={handleAddPostClick}
+              className="mt-4 bg-[#605BFF] text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:cursor-pointer"
+              style={{
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "inset 0 0 0 1px #5A5C60";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              Add Post
+            </Button>
+            
             ) : (
               <Button
                 to="/signup"
-                className="mt-4 bg-customPurple text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-grayBorder hover:cursor-pointer"
+                className="mt-4 bg-[#605BFF] text-white rounded-lg px-5 py-2 hover:bg-white hover:text-black hover:border hover:border-solid hover:border-[inset 0 0 0 1px #5A5C60] hover:cursor-pointer"
               >
                 Signup
               </Button>

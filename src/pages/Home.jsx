@@ -56,7 +56,7 @@ function Home() {
         <div className="flex flex-col gap-20 my-20 md:my-14 items-center justify-around">
           <div className="flex flex-col items-center md:items-start">
             <h1 className="text-[52px] md:text-[52px] lg:text-[72px] hero-heading mx-auto glowing-head-hero">
-              Welcome to the <span className="text-customPurple hero-heading-span">BlogHub!</span>
+              Welcome to the <span className="text-[#605BFF] hero-heading-span">BlogHub!</span>
             </h1>
             <p className="md:text-lg text-sm lg:px-5 px-10 md:px-0 mx-auto text-gray-500">
               <TextGenerateEffect words={welcomeMessage} />

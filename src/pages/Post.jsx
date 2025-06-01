@@ -7,7 +7,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import MiniLoader from "../Components/MiniLoader";
-import  authService from '../appwrite/auth.js';
 import { GoBack } from "../Components/ui/goBack.jsx";
 import UserProfilePhoto from "../Components/ui/userProfilePhoto.jsx";
 import calculateReadingTime from "../utils/readingTime.js";
@@ -146,7 +145,7 @@ export default function Post() {
               >
                 <FontAwesomeIcon 
                   icon={faHeart} 
-                  className={liked ? "text-customPurple" : "text-gray-400"} 
+                  className={liked ? "text-[#605BFF]" : "text-gray-400"} 
                 />
                 {loading ? (
                   <MiniLoader />

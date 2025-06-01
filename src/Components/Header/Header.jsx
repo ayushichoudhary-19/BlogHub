@@ -100,7 +100,7 @@ function Header() {
                         onClick={closeNavbar}
                         to={item.slug}
                         className={({isActive}) => 
-                          `block px-4 py-2 text-lg md:text-base transition-colors duration-200 ${isActive ? 'text-customPurple' : 'text-white hover:text-gray-300'}`
+                          `block px-4 py-2 text-lg md:text-base transition-colors duration-200 ${isActive ? 'text-[#605BFF]' : 'text-white hover:text-gray-300'}`
                         }
                       >
                         {item.name}
@@ -129,7 +129,7 @@ function Header() {
                 <NavLink
                   onClick={closeNavbar}
                   to={"/signup"}
-                  className="py-2 px-5 text-white rounded-lg shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-customPurple hover:bg-white hover:text-black"
+                  className="py-2 px-5 text-white rounded-lg shadow-sm hover:scale-105 duration-200 hover:cursor-pointer bg-[#605BFF] hover:bg-white hover:text-black"
                 >
                   Signup
                 </NavLink>

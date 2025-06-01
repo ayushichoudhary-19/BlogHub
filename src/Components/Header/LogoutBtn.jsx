@@ -22,7 +22,7 @@ function LogoutBtn() {
 
   return (
     <button
-      className="py-2 px-5 bg-customPurple text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-white hover:text-black"
+      className="py-2 px-5 bg-[#605BFF] text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-white hover:text-black"
       onClick={logoutHandler}
       disabled={loading}
     >

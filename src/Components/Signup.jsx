@@ -56,7 +56,7 @@ function Signup() {
                         <Input
                             label="Full Name: "
                             placeholder="Enter your full name"
-                            className="focus:border-solid focus:border-x-2 focus:border-customPurple"
+                            className="focus:border-solid focus:border-x-2 focus:border-[#605BFF]"
                             {...register("name", {
                                 required: true,
                             })}
@@ -64,7 +64,7 @@ function Signup() {
                         <Input
                             label="Email: "
                             placeholder="Enter your email"
-                            className="focus:border-solid focus:border-x-2 focus:border-customPurple"
+                            className="focus:border-solid focus:border-x-2 focus:border-[#605BFF]"
                             type="email"
                             {...register("email", {
                                 required: true,
@@ -77,7 +77,7 @@ function Signup() {
                         <Input
                             label="Password: "
                             type="password"
-                            className="focus:border-solid focus:border-x-2 focus:border-customPurple"
+                            className="focus:border-solid focus:border-x-2 focus:border-[#605BFF]"
                             placeholder="Enter your password"
                             {...register("password", {
                                 required: true,
@@ -88,7 +88,7 @@ function Signup() {
                             :
                             <Button type="submit"
                             style={{marginTop: "1.5rem"}}
-                                className="my-3 py-2 px-4 w-full md:py-3 text-white bg-customPurple button-custom rounded-lg shadow-lg hover:bg-[#7974f8f5] duration-400 hover:cursor-pointer"
+                                className="my-3 py-2 px-4 w-full md:py-3 text-white bg-[#605BFF] button-custom rounded-lg shadow-lg hover:bg-[#7974f8f5] duration-400 hover:cursor-pointer"
                             >
                                 Create Account
                             </Button>}

@@ -1,9 +1,3 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
- 
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -13,14 +7,10 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        customPurple: '#605BFF',
-        customGray: '#171F29',
-      },
       boxShadow: {
         grayBorder: 'inset 0 0 0 1px #5A5C60',
       },
-            animation: {
+      animation: {
         spotlight: "spotlight 2s ease .75s 1 forwards",
       },
       keyframes: {
@@ -37,18 +27,14 @@ export default {
       },
     },
   },
-  plugins: [ addVariablesForColors,],
+  plugins: [
+    // addVariablesForColors, // Temporarily comment this out
+  ],
 };
 
-
-// This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
+// Temporarily comment out the plugin function as well if it's in the same file
+/*
 function addVariablesForColors({ addBase, theme }) {
-  let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
- 
-  addBase({
-    ":root": newVars,
-  });
+  // ... plugin code ...
 }
+*/
